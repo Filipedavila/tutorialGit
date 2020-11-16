@@ -1,6 +1,9 @@
 package pt.iade.aulas.tutorialgit.controllers;
 
+import java.util.Iterator;
 import java.util.List;
+
+import net.minidev.json.annotate.JsonIgnore;
 import org.slf4j.Logger;
 
 import org.slf4j.LoggerFactory;
@@ -59,22 +62,44 @@ public class StudentController {
     }
 
 
-    @PostMapping(path = "{number}/enrolments", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Enrolment addEnrolment(@PathVariable("number") int number, @RequestBody int unitId) throws NotFoundException, AlreadyExistsException {
+    @PostMapping(path = "{number}/enrolments/add/}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Response addEnrolment(@PathVariable("number") int number, @RequestBody Enrolment unitEnroll) throws NotFoundException, AlreadyExistsException {
         logger.info("Enroling student with number " +
-                number + " in unit with id " + unitId);
+                number + " in unit with id " + unitEnroll.getUnit());
+        Iterator<Student> studentIterator = StudentRepository.getAllStudents().iterator();
+
+        while(studentIterator.hasNext()){
+            Student inst = studentIterator.next();
+            if(inst.getNumber() == number ){
+                Response answer = inst.enroll(unitEnroll);
+                return answer;
+
+            }
+
+        }
+
+        return (new Response("Enrolment Failed", null));
+
+
+
+    }
+
+
+    @GetMapping (path = "{number}/enrolments/{unitId}/{grade}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Enrolment deleteStudent(@PathVariable("number") int number,
+                                      @PathVariable("unitId") int unitId,
+                                      @PathVariable double grade)     throws NotFoundException {
+        logger.info("Setting grade of enrolment with id " + unitId +
+                " of student with number " + number);
         Student student = StudentRepository.getStudent(number);
         if (student != null) {
-            Unit unit = UnitRepository.getUnit(unitId);
-            if (unit != null) {
-                if (student.getEnrolmentUnitById(unitId) != null)
-                    throw new AlreadyExistsException("Erro ",""+unitId, "Já existe este enrolment");
-                else {
-                    Enrolment enrolment = new Enrolment(student, unit, -1);
-                    student.enroll(enrolment);
-                    return enrolment;
-                }
+            Enrolment enr = student.getEnrolmentUnitById(unitId);
+            if (enr != null) {
+                enr.setGrade(grade);
+                return enr;
             } else throw new NotFoundException("" + unitId, "Unit", "id");
-        } else throw new NotFoundException("" + number, "Student", "number");
+        }
+        return null;
+
     }
 }

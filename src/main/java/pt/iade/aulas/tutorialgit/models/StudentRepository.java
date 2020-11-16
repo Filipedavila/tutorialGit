@@ -1,10 +1,12 @@
 package pt.iade.aulas.tutorialgit.models;
 
+import net.minidev.json.annotate.JsonIgnore;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class StudentRepository {
-
+    @JsonIgnore
  private static ArrayList<Student> students = new ArrayList<Student>();
  public static void populate() {
  Student s; // auxiliary variable
@@ -47,5 +49,6 @@ public class StudentRepository {
     students.add(add);
     return add;
  }
+
 
 }

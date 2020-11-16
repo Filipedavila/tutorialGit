@@ -1,5 +1,9 @@
 package pt.iade.aulas.tutorialgit.models;
 
+
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -10,7 +14,10 @@ public class Student {
  private String email;
  private char gender;
  private int number;
+
+ @JsonIgnore
  private  ArrayList<Unit> units;
+    @JsonIgnore
  private ArrayList<Enrolment> enrolments;
 
     public Student(String name, LocalDate birthDate, char gender) {
@@ -20,6 +27,7 @@ public class Student {
         this.number = nextNumber;
         nextNumber++;
         email = "";
+
         units = new ArrayList<Unit>();
         enrolments = new ArrayList<>();
     }
@@ -76,11 +84,13 @@ public class Student {
     }
 
     public  Enrolment getEnrolmentUnitById(int unitId){
-
+        Enrolment enroll = null;
         for(Enrolment enr:enrolments)
-            if(enr.getUnit().getId()==unitId) return enr;
+            if(enr.getUnit().getId()==unitId)
+                enroll = enr;
 
-            return null;
+
+            return enroll;
 
     }
     public void inscribe(int id){
@@ -92,13 +102,21 @@ public class Student {
     }
 
     public  ArrayList<Enrolment> getEnrolments() {
-      return enrolments;
+
+        return enrolments;
     }
 
-    public void enroll(Enrolment enrolment) {
-        enrolments.add(enrolment);
-        enrolment.getUnit().getEnrolments().add(enrolment);
+    public Response enroll(Enrolment enrolmentToAdd) {
+        for(Enrolment enrolmentStudent: enrolments){
+            if(enrolmentStudent.getUnit() == enrolmentToAdd.getUnit() ){
+                return (new Response("Já existe o enrollment", null));
+            }
+        }
+        enrolments.add(enrolmentToAdd);
+        enrolmentToAdd.getUnit().getEnrolments().add(enrolmentToAdd);
 
+        return (new Response("Foi adicionado com sucesso", enrolmentToAdd));
+        // TO DO atualizar tambem a lista nos units
 
     }
 

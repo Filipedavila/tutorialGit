@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add a curricular unit</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="createStudent.js"></script>
+</head>
+<body>
+Name: <input id="name" type="text"><br/>
+DOB: <input id="date" type="date" ><br/>
+Gender: <input type="radio" id="male" name="gender" value="male">
+<label for="male">Male</label><br>
+<input type="radio" id="female" name="gender" value="female">
+<label for="female">Female</label><br>
+<input type="button" value="Submit" onclick="save()">
+<p id="message"></p>
+</body>
+</html>

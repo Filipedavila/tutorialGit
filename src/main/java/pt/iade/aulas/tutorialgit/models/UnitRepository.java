@@ -1,6 +1,7 @@
 package pt.iade.aulas.tutorialgit.models;
 
 import java.lang.reflect.Array;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class UnitRepository {
@@ -11,7 +12,18 @@ public class UnitRepository {
         return units;
     }
 
+    public static void populate() {
 
+        units.add(new Unit(1,"POO", 6));
+        units.add(new Unit(2,"DB", 6));
+        units.add(new Unit(3,"TIC", 6));
+        units.add(new Unit(4,"TIC2", 6));
+    }
+
+    public static ArrayList<Unit> getUnits() {
+    return units;
+
+    }
     public static Unit getUnit(int id) {
         Unit res = null;
         for (Unit inst : units) {
@@ -23,15 +35,18 @@ public class UnitRepository {
         return res;
     }
 
-    public static Unit createUnit(int id) {
-        Unit res = null;
-        for (Unit inst : units) {
-            if (inst.getId() == id) {
-                res = inst;
-            }
 
-        }
-        return res;
+    /**
+     *
+     * @param unit
+     * @requires That is checked wether already exists
+     * @return
+     */
+    public static Unit createUnit(Unit unit) {
+     units.add(unit);
+
+
+        return unit;
     }
 
     public static Boolean removeStudent(int num) {
