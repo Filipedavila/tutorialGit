@@ -3,7 +3,7 @@ package pt.iade.aulas.tutorialgit.controllers;
 import java.util.Iterator;
 import java.util.List;
 
-import net.minidev.json.annotate.JsonIgnore;
+
 import org.slf4j.Logger;
 
 import org.slf4j.LoggerFactory;

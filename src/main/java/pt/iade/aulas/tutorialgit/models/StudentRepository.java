@@ -4,6 +4,7 @@ import net.minidev.json.annotate.JsonIgnore;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class StudentRepository {
     @JsonIgnore
@@ -51,4 +52,6 @@ public class StudentRepository {
  }
 
 
+    public static Collection<? extends Person> getStudents() {
+    }
 }

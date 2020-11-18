@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Student {
+public class Student extends Person{
  private static int nextNumber = 0;
  private String name;
  private LocalDate birthDate;
@@ -127,5 +127,10 @@ public class Student {
         }
 
         return grade;
+    }
+
+    @Override
+    public String getReference() {
+        return null;
     }
 }
