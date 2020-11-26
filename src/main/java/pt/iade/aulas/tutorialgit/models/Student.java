@@ -7,12 +7,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Student extends Person{
+public class Student extends Person {
  private static int nextNumber = 0;
- private String name;
- private LocalDate birthDate;
- private String email;
- private char gender;
  private int number;
 
  @JsonIgnore
@@ -20,10 +16,8 @@ public class Student extends Person{
     @JsonIgnore
  private ArrayList<Enrolment> enrolments;
 
-    public Student(String name, LocalDate birthDate, char gender) {
-        this.name = name;
-        this.birthDate = birthDate;
-        this.gender = gender;
+    public Student(String name, LocalDate birthDay, char gender) {
+        super(name, gender, birthDay);
         this.number = nextNumber;
         nextNumber++;
         email = "";
@@ -44,15 +38,15 @@ public class Student extends Person{
         }
 
     public LocalDate getBirthDate() {
-        return birthDate;
+        return birthDay;
     }
 
     public static void setNextNumber(int nextNumber) {
         Student.nextNumber = nextNumber;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
+    public void setBirthDate(LocalDate birthDay) {
+        this.birthDay = birthDay;
     }
 
     public String getEmail() {
@@ -131,6 +125,7 @@ public class Student extends Person{
 
     @Override
     public String getReference() {
-        return null;
+
+        return "S<"+number+">";
     }
 }

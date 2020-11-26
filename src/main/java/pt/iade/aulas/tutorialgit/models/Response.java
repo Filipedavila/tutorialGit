@@ -12,9 +12,15 @@ public class Response {
     public String getMessage() {
         return message;
     }
+
     public Object getObject() {
         return object; }
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-
+    public void setObject(Object object) {
+        this.object = object;
+    }
 }
