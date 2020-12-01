@@ -2,6 +2,7 @@ package pt.iade.aulas.tutorialgit;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import pt.iade.aulas.tutorialgit.models.MaterialsRepository;
 import pt.iade.aulas.tutorialgit.models.StudentRepository;
 import pt.iade.aulas.tutorialgit.models.TeacherRepository;
 import pt.iade.aulas.tutorialgit.models.UnitRepository;
@@ -14,6 +15,7 @@ public class TutorialgitApplication {
 		StudentRepository.populate();
 		TeacherRepository.populate();
 		UnitRepository.populate();
+		MaterialsRepository.populate();
 
 	}
 

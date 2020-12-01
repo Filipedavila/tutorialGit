@@ -6,8 +6,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-public class Student extends Person {
+public class Student extends Person implements  Statistical{
  private static int nextNumber = 0;
  private int number;
 
@@ -89,6 +91,7 @@ public class Student extends Person {
     }
     public void inscribe(int id){
        Unit uni = UnitRepository.getUnit(id);
+
        units.add(uni);
        Enrolment enroll = new Enrolment(this,uni,0);
        enrolments.add(enroll);
@@ -127,5 +130,38 @@ public class Student extends Person {
     public String getReference() {
 
         return "S<"+number+">";
+    }
+    @Override
+    public double getAverage() {
+        Double soma = enrolments.stream().mapToDouble(x -> x.getGrade()).sum();
+
+        return Math.round(soma/ enrolments.size());
+    }
+
+    @Override
+    public double getMax() {
+
+        Optional<Enrolment> max = enrolments.stream().reduce((acc , x ) ->acc.getGrade() <= x.getGrade() ? x : acc);
+
+        return max.get().getGrade();
+    }
+    @Override
+    public double getMin() {
+        Optional<Enrolment>  min = enrolments.stream().reduce((acc , x ) ->acc.getGrade() >= x.getGrade() ? x : acc);
+
+        return min.get().getGrade();
+    }
+
+    public double getGrade(Unit unit){
+       return getEnrolmentUnitById(unit.getId()).getGrade();
+    }
+
+    @Override
+    public HistogramSlot[] getHistogram(Integer nSlots) {
+   // for(int i =0; i< nSlots; i++){
+
+
+    //}
+        return null;
     }
 }

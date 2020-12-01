@@ -17,6 +17,8 @@ public class StudentRepository {
  students.add(new Student("Mary",LocalDate.parse("1999-12-23"),'F'));
  s = new Student("James",LocalDate.parse("2001-07-02"),'M');
  students.add(s);
+     s = new Student("Jam222es",LocalDate.parse("2001-07-02"),'M');
+     students.add(s);
  }
 
  public static ArrayList<Student> getAllStudents(){
@@ -50,6 +52,8 @@ public class StudentRepository {
     students.add(add);
     return add;
  }
+
+
 
 
 

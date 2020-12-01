@@ -25,7 +25,7 @@ public class Enrolment {
         return student;
     }
 
-    public double getGrade() {
+    public Double getGrade() {
         return grade;
     }
 }
