@@ -51,4 +51,32 @@ import java.util.stream.Stream;
             }
             return stats;
         }
+
+        @GetMapping(path = "/group/average/{type}/{number}", produces = MediaType.APPLICATION_JSON_VALUE)
+        public GroupResult  getStatsDocent(@PathVariable("type") String type,
+                                                @PathVariable("number") int number) {
+            logger.info("Getting Histogram info");
+            Statistical stat = null;
+            ArrayList<Statistical> stats = null;
+            double result= 0;
+            int size = 0;
+            if(type.equalsIgnoreCase("teacher")) {
+                Teacher tch = TeacherRepository.getTeacher(number);
+                stats.addAll(tch.getUnits());
+                size = tch.getUnits().size();
+                result =  stat.getGroupAverage(stats);
+                return new GroupResult(size,result,tch);
+
+
+            }else {
+                Unit u = UnitRepository.getUnit(number);
+                stats.addAll(u.getStudents());
+                result = stat.getGroupAverage(stats);
+                size = u.getStudents().size();
+                return new GroupResult(size,result,u);
+
+            }
+
+
+        }
 }

@@ -99,16 +99,31 @@ public class Unit implements Statistical {
         return min.get().getGrade();
     }
 
+    // TO DO  Esta a funcionar
     @Override
     public HistogramSlot[] getHistogram(Integer nSlots) {
         double iter = 20 / nSlots;
         HistogramSlot[] history = new HistogramSlot[nSlots];
-        for( int i = 0, j = 0; i <= nSlots; i+= iter, j++) {
+        for( int i = 0, j = 0; j < nSlots; i+= iter, j+=1) {
             double start = i;
             double End = i + iter;
-            long Hmany = students.stream().filter((x)->  x.getGrade(this) > start && x.getGrade(this) <= End).count();
-            history[j]  = new HistogramSlot( i , i + i, (int) Hmany);
+            long Hmany = students.stream().filter((x)-> x.getUnitGradeByID(this.id) > start && x.getUnitGradeByID(this.id) <= End).count();
+            history[j]  = new HistogramSlot( start , End, (int) Hmany);
         }
+
         return history;
+    }
+    @Override
+    public String toString(){
+        StringBuilder build = new StringBuilder();
+        build.append("[");
+        build.append(" ");
+        for( Enrolment enrolment1 : enrolments){
+            build.append(enrolment1.toString());
+
+        }
+        build.append("]");
+        return build.toString();
+
     }
 }

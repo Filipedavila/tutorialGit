@@ -71,8 +71,8 @@ public class StudentController {
         while(studentIterator.hasNext()){
             Student inst = studentIterator.next();
             if(inst.getNumber() == number ){
-                Response answer = inst.enroll(unitEnroll);
-                return answer;
+                 inst.enroll(unitEnroll);
+                return null;
 
             }
 

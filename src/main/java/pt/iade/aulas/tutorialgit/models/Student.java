@@ -9,14 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class Student extends Person implements  Statistical{
- private static int nextNumber = 0;
- private int number;
+public class Student extends Person implements  Statistical {
+    private static int nextNumber = 0;
+    private int number;
 
- @JsonIgnore
- private  ArrayList<Unit> units;
     @JsonIgnore
- private ArrayList<Enrolment> enrolments;
+    private ArrayList<Unit> units;
+    @JsonIgnore
+    private ArrayList<Enrolment> enrolments;
 
     public Student(String name, LocalDate birthDay, char gender) {
         super(name, gender, birthDay);
@@ -27,17 +27,19 @@ public class Student extends Person implements  Statistical{
         units = new ArrayList<Unit>();
         enrolments = new ArrayList<>();
     }
+
     public static int getNextNumber() {
-        
-        return nextNumber; 
+
+        return nextNumber;
     }
 
-    public String getName() { 
-        return name; 
+    public String getName() {
+        return name;
     }
+
     public void setName(String name) {
-          this.name = name; 
-        }
+        this.name = name;
+    }
 
     public LocalDate getBirthDate() {
         return birthDay;
@@ -72,40 +74,44 @@ public class Student extends Person implements  Statistical{
     }
 
     public void setNumber(int number) {
-		this.number = number;
+        this.number = number;
     }
 
     public ArrayList<Unit> getUnits() {
         return units;
     }
 
-    public  Enrolment getEnrolmentUnitById(int unitId){
+    public Enrolment getEnrolmentUnitById(int unitId) {
         Enrolment enroll = null;
-        for(Enrolment enr:enrolments)
-            if(enr.getUnit().getId()==unitId)
+        for (Enrolment enr : enrolments)
+            if (enr.getUnit().getId() == unitId)
                 enroll = enr;
 
 
-            return enroll;
+        return enroll;
 
     }
-    public void inscribe(int id){
-       Unit uni = UnitRepository.getUnit(id);
 
-       units.add(uni);
-       Enrolment enroll = new Enrolment(this,uni,0);
-       enrolments.add(enroll);
-       UnitRepository.addStudent(this,enroll,id);
+    //TO DO rever isto e reconstruir
+    public void inscribe(int id) {
+        Unit uni = UnitRepository.getUnit(id);
+
+        units.add(uni);
+
+
+
+
     }
 
-    public  ArrayList<Enrolment> getEnrolments() {
+    public ArrayList<Enrolment> getEnrolments() {
 
         return enrolments;
     }
 
     public Response enroll(Enrolment enrolmentToAdd) {
-        for(Enrolment enrolmentStudent: enrolments){
-            if(enrolmentStudent.getUnit() == enrolmentToAdd.getUnit() ){
+        for (Enrolment enrolmentStudent : enrolments) {
+            if (enrolmentStudent.getUnit() == enrolmentToAdd.getUnit()) {
+                inscribe(enrolmentToAdd.getUnit().getId());
                 return (new Response("Já existe o enrollment", null));
             }
         }
@@ -117,10 +123,10 @@ public class Student extends Person implements  Statistical{
 
     }
 
-    public double getUnitGradeByID(int id){
-       double grade = 0;
-        for ( Enrolment enrolls : enrolments ) {
-            if(enrolls.getUnit().getId() == id) grade = enrolls.getGrade();
+    public double getUnitGradeByID(int id) {
+        double grade = 0;
+        for (Enrolment enrolls : enrolments) {
+            if (enrolls.getUnit().getId() == id) grade = enrolls.getGrade();
         }
 
         return grade;
@@ -129,39 +135,46 @@ public class Student extends Person implements  Statistical{
     @Override
     public String getReference() {
 
-        return "S<"+number+">";
+        return "S<" + number + ">";
     }
+
     @Override
     public double getAverage() {
         Double soma = enrolments.stream().mapToDouble(x -> x.getGrade()).sum();
 
-        return Math.round(soma/ enrolments.size());
+        return Math.round(soma / enrolments.size());
     }
 
     @Override
     public double getMax() {
 
-        Optional<Enrolment> max = enrolments.stream().reduce((acc , x ) ->acc.getGrade() <= x.getGrade() ? x : acc);
+        Optional<Enrolment> max = enrolments.stream().reduce((acc, x) -> acc.getGrade() <= x.getGrade() ? x : acc);
 
         return max.get().getGrade();
     }
+
     @Override
     public double getMin() {
-        Optional<Enrolment>  min = enrolments.stream().reduce((acc , x ) ->acc.getGrade() >= x.getGrade() ? x : acc);
+        Optional<Enrolment> min = enrolments.stream().reduce((acc, x) -> acc.getGrade() >= x.getGrade() ? x : acc);
 
         return min.get().getGrade();
     }
 
-    public double getGrade(Unit unit){
-       return getEnrolmentUnitById(unit.getId()).getGrade();
+    public double getGrade(Unit unit) {
+        return getEnrolmentUnitById(unit.getId()).getGrade();
     }
 
     @Override
     public HistogramSlot[] getHistogram(Integer nSlots) {
-   // for(int i =0; i< nSlots; i++){
+        double iter = 20 / nSlots;
+        HistogramSlot[] history = new HistogramSlot[nSlots];
+        for (int i = 0, j = 0; j < nSlots; i += iter, j += 1) {
+            double start = i;
+            double End = i + iter;
+            long Hmany = enrolments.stream().filter((x) -> x.getGrade() > start && x.getGrade() <= End).count();
+            history[j] = new HistogramSlot(start, End, (int) Hmany);
+        }
 
-
-    //}
-        return null;
+        return history;
     }
 }

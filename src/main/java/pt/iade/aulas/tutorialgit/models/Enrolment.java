@@ -28,4 +28,16 @@ public class Enrolment {
     public Double getGrade() {
         return grade;
     }
+
+    @Override
+    public String toString(){
+        StringBuilder build = new StringBuilder();
+        build.append("[");
+        build.append(" ");
+        build.append(this.getStudent().getName());
+        build.append("- Grade : ");
+        build.append(this.getGrade());
+        build.append("]");
+        return build.toString();
+    }
 }

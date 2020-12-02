@@ -58,15 +58,25 @@ public class UnitRepository {
         return false;
     }
 
+    public static void addStudentToList(Student std){
 
-    public static void addStudent(Student student,Enrolment enroll, int id) {
+    }
+
+    public static void addStudent(Student student,Enrolment enroll, int id) {   // verificar se o Enrolment já não existe   2. verificar onde está a ser adicionado
+        addStudentToList(student);
         for (Unit inst : units) {
-            if (inst.getId() == id) {
+            if (inst.getId() == enroll.getUnit().getId()) {   // se encontrar id pertencende  À unidade
+
+                student.enroll(enroll);
                 inst.addStudent(student);
+                inst.addEnrolment(enroll);
 
 
             }
 
         }
     }
+
+
+
 }
